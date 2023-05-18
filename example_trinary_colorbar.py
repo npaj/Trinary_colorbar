@@ -39,7 +39,7 @@ def plot_legend(ax, sat):
 
     # Plot labels at vertices
     offset = 0.4
-    fontsize = 12
+    fontsize = 10
     ax.text(basis[0,0]*(1+offset), basis[0,1]*(1+offset), '$U_1$', horizontalalignment='center',
             verticalalignment='center', fontsize=fontsize)
     ax.text(basis[1,0]*(1+offset), basis[1,1]*(1+offset), '$U_2$', horizontalalignment='center',
@@ -64,6 +64,8 @@ u = np.loadtxt('u.txt')
 u = u/np.max(u, axis=1)[:, None]
 mmaxu = np.max(u)
 
+sat = 1
+
 
 
 ## Scatter plot
@@ -83,18 +85,20 @@ def get_rgbcolor(u, color_saturation = 1):
 om = points[:, 0]
 k =  points[:, 1]
 
-plt.figure()
+plt.figure(figsize=(4, 3))
 ax = plt.subplot(111)
 
 idxR = np.abs(np.imag(k))< 1e-5 # get only real wavenumber
 
 u = u[idxR,:]
-ax.scatter(np.real(k[idxR]), np.real(om[idxR]), s = 1, c=get_rgbcolor(u, 0.8))
+ax.scatter(np.real(k[idxR]), np.real(om[idxR]), s = 0.8, c=get_rgbcolor(u, sat))
 
 ax.set_xlabel("k")
-ax.set_xlim(0, 15)
+ax.set_xlim(0, 10)
+ax.set_ylim(0, 30)
 ax.set_ylabel(r"$\omega$")
-axins = ax.inset_axes([0.7, 0.7, 0.2, 0.2])
-plot_legend(axins, 0.8)
+axins = ax.inset_axes([0.75, 0.05, 0.2, 0.2])
+plot_legend(axins, sat)
+plt.tight_layout()
 plt.savefig('ex.png', dpi = 800)
 plt.show()
