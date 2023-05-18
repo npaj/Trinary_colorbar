@@ -4,10 +4,12 @@ import matplotlib.pyplot as plt
 
 ### Function for legend
 ## https://stackoverflow.com/questions/31967472/smooth-interpolated-tertiary-or-quaternary-colour-scales-e-g-r-g-b-triangle
-def abc_to_rgb(A=0.0,B=0.0,C=0.0):
+def abc_to_rgb(A=0.0,B=0.0,C=0.0, sat=1):
     ''' Map values A, B, C (all in domain [0,1]) to
     suitable red, green, blue values.'''
-    return (min(B+C,1.0),min(A+C,1.0),min(A+B,1.0))
+    #return (min(B+C,1.0),min(A+C,1.0),min(A+B,1.0)) #CMY
+    maxr = max(abs(A),abs(B),abs(C))/sat#
+    return (A/maxr,B/maxr,C/maxr)#RGB
 
 def plot_legend(ax, sat):
     ''' Plots a legend for the colour scheme
@@ -20,7 +22,7 @@ def plot_legend(ax, sat):
 
 
     # Plot points
-    a, b, c = np.mgrid[0.0:sat:50j, 0.0:sat:50j, 0.0:sat:50j]
+    a, b, c = np.mgrid[0.0:1:50j, 0.0:1:50j, 0.0:1:50j]
     a, b, c = a.flatten(), b.flatten(), c.flatten()
 
     abc = np.dstack((a,b,c))[0]
@@ -28,7 +30,7 @@ def plot_legend(ax, sat):
     abc = np.array(list(map(lambda x: x/sum(x), abc))) # or just make sure points lie inside triangle ...
 
     data = np.dot(abc, basis)
-    colours = [abc_to_rgb(A=point[0],B=point[1],C=point[2]) for point in abc]
+    colours = [abc_to_rgb(A=point[0],B=point[1],C=point[2], sat=sat) for point in abc]
 
     ax.scatter(data[:,0], data[:,1],marker=',',edgecolors='none',facecolors=colours)
 
@@ -74,8 +76,8 @@ def get_rgbcolor(u, color_saturation = 1):
     return list of rgb
     """
     norm = np.max(u)/(color_saturation)
-    #return [(u1/norm, u2/norm, u3/norm) for u1, u2, u3 in zip(u[:,0],u[:,1],u[:,2])] ## RGB
-    return [(min((B+C)/norm,1.0),min((A+C)/norm,1.0),min((A+B)/norm,1.0)) for A, B, C in zip(u[:,0],u[:,1],u[:,2])] ### CMY
+    return [(u1/norm, u2/norm, u3/norm) for u1, u2, u3 in zip(u[:,0],u[:,1],u[:,2])] ## RGB
+    #return [(min((B+C)/norm,1.0),min((A+C)/norm,1.0),min((A+B)/norm,1.0)) for A, B, C in zip(u[:,0],u[:,1],u[:,2])] ### CMY
 
 
 om = points[:, 0]
