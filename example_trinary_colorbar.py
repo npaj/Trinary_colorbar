@@ -56,7 +56,7 @@ def plot_legend(ax, sat):
 
 points = np.loadtxt('omega_k_PSV.csv', delimiter=",", dtype=complex)
 
-### get 3 values by points
+### get 3 values by point
 
 u = np.loadtxt('u.txt')
 u = u/np.max(u, axis=1)[:, None]
