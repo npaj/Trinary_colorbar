@@ -74,8 +74,8 @@ def get_rgbcolor(u, color_saturation = 1):
     return list of rgb
     """
     norm = np.max(u)/(color_saturation)
-    #return [(u1/norm, u2/norm, u3/norm) for u1, u2, u3 in zip(u[:,0],u[:,1],u[:,2])]
-    return [(min((B+C)/norm,1.0),min((A+C)/norm,1.0),min((A+B)/norm,1.0)) for A, B, C in zip(u[:,0],u[:,1],u[:,2])]
+    #return [(u1/norm, u2/norm, u3/norm) for u1, u2, u3 in zip(u[:,0],u[:,1],u[:,2])] ## RGB
+    return [(min((B+C)/norm,1.0),min((A+C)/norm,1.0),min((A+B)/norm,1.0)) for A, B, C in zip(u[:,0],u[:,1],u[:,2])] ### CMY
 
 
 om = points[:, 0]
